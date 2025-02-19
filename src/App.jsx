@@ -1,33 +1,57 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './App.css';
+import QrScanner from 'qr-scanner';
+import { useEffect, useRef, useState } from 'react';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const videoRef = useRef(null);
+  const [scannedData, setScannedData] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const scannerRef = useRef(null);
+  
+  useEffect(() => {
+    // Initialize QR scanner
+    const scanner = new QrScanner(videoRef.current, (result) => {
+        console.log("Scanned Data: ", result.data);
 
-  return (
+        setScannedData(result.data);
+        setShowPopup(true);
+        scanner.stop();
+    }, {
+        highlightScanRegion: true,
+        highlightCodeOutline: true,
+    });
+
+    scanner.start();
+    scannerRef.current = scanner;
+
+    return () => {
+        // Cleanup on component unmount
+        scanner.stop();
+    };
+  }, []);
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+  };
+
+  return(
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className='p-4 h-[25vh] flex items-center justify-center md:h-[20vh]'>
+        <p className='text-3xl font-bold md:text-6xl'>General Assembly Registration</p>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+
+      <div className='bg-gray-300 w-[100%] h-[60vh] md:w-[70%] md:h-[60vh] rounded-md flex items-center justify-center'>
+        <video ref={videoRef} className='w-full h-full object-cover bg-gray-200'></video>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
+      {showPopup && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex justify-center items-center z-50">
+          <div className="bg-[#333] m-8 rounded-md shadow-md text-center w-104 h-48 flex flex-col items-center justify-center">
+            <p className='text-3xl font-medium'>Registration Successful!</p>
+            <button onClick={handleClosePopup} className="mt-4 px-6 py-2 text-white rounded-md">Close</button>
+          </div>
+        </div>
+      )}
     </>
   )
 }
