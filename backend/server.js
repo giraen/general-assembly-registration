@@ -35,7 +35,7 @@ db.getConnection((err, connection) => {
 app.post("/check-registration", async (req, res) => {
     try {
         const { tup_id } = req.body;
-        const result = await db.query("SELECT * FROM registrations WHERE tup_id = ?", [tup_id]);
+        const result = await db.query("SELECT * FROM student_student_registrations WHERE tup_id = ?", [tup_id]);
 
         const response = { exists: result.length > 0 };
         console.log("Response JSON:", response); // ✅ Log the response
@@ -53,7 +53,7 @@ app.post("/register", (req, res) => {
     const { tup_id } = req.body;
     const timestamp = new Date().toISOString().slice(0, 19).replace("T", " ");
 
-    const insertQuery = "INSERT INTO registrations (tup_id, time) VALUES (?, ?)";
+    const insertQuery = "INSERT INTO student_registrations (tup_id, time) VALUES (?, ?)";
 
     db.query(insertQuery, [tup_id, timestamp], (err, results) => {
         if (err) {
