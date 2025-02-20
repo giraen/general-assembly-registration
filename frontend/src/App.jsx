@@ -16,7 +16,7 @@ const App = () => {
       scannerRef.current.stop();
     }
 
-    const scanner = new QrScanner(videoRef.current, async (result) => {
+    const scanner = new QrScanner(videoRef.current, (result) => {
       console.log("Scanned Data: ", result.data);
 
       if (!/^TUPM-\d{2}-\d{4}$/.test(result.data)) {
@@ -27,29 +27,52 @@ const App = () => {
   
       setScannedData(result.data);
       
-      try {
-        const response = await fetch(`${API_URL}/check-registration`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ student_id: result.data }),
-        });
+      // try {
+      //   const response = await fetch(`${API_URL}/check-registration`, {
+      //     method: "POST",
+      //     headers: { "Content-Type": "application/json" },
+      //     body: JSON.stringify({ student_id: result.data }),
+      //   });
 
-        const data = await response.json();
+      //   const data = await response.json();
 
+      //   if (data.exists) {
+      //     setMessage("⚠️ Already Registered!");
+      //   } else {
+      //     await fetch(`${API_URL}/register`, {
+      //       method: "POST",
+      //       headers: { "Content-Type": "application/json" },
+      //       body: JSON.stringify({ student_id: result.data }),
+      //     })
+      //   }
+      // } catch (error) {
+      //   setMessage("❌ Error connecting to server.");
+      //   console.error("Server Error:", error);
+      // }
+      fetch(`${API_URL}/check-registration`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ student_id: result.data }),
+      })
+      .then((response) => response.json())
+      .then((data) => {
         if (data.exists) {
           setMessage("⚠️ Already Registered!");
         } else {
-          await fetch(`${API_URL}/register`, {
+          fetch(`${API_URL}/register`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ student_id: result.data }),
-          })
+          });
+          setMessage("✅ Registration Successful!");
         }
-      } catch (error) {
+        setShowPopup(true);
+      })
+      .catch((error) => {
         setMessage("❌ Error connecting to server.");
         console.error("Server Error:", error);
-      }
-      setShowPopup(true);
+        setShowPopup(true);
+      });
       scanner.stop();
     }, {
       highlightScanRegion: true,
