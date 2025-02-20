@@ -34,16 +34,19 @@ const App = () => {
           body: JSON.stringify({ student_id: result.data }),
         });
 
-        const data = await response.json();
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        const text = await response.text();
 
-        if (data.exists) {
+        if (text === "exists") {
           setMessage("⚠️ Already Registered!");
-        } else {
+        } else if (text === "not_exists") {
           await fetch(`${API_URL}/register`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ student_id: result.data }),
           })
+        } else {
+          setMessage("❌ Unexpected response from server.");
         }
       } catch (error) {
         setMessage("❌ Error connecting to server.");

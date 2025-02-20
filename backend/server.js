@@ -23,13 +23,13 @@ db.getConnection((err, connection) => {
 
 app.post("/check-registration", async (req, res) => {
     try {
-        const { student_id } = req.body;
-        const result = await db.query("SELECT * FROM registrations WHERE student_id = ?", [student_id]);
+        const student_id = req.body.student_id;
+        const result = await checkDatabase(student_id);
 
         if (result.length > 0) {
-            res.json({ exists: true });
+            res.status(200).send("exists");
         } else {
-            res.json({ exists: false });
+            res.status(200).send("not_exists");
         }
     } catch (error) {
         console.error("Database error:", error);
