@@ -1,6 +1,5 @@
 import './App.css';
 import QrScanner from 'qr-scanner';
-import 'dotenv/config';
 import { useEffect, useRef, useState } from 'react';
 
 const App = () => {
@@ -8,7 +7,7 @@ const App = () => {
   const [scannedData, setScannedData] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const scannerRef = useRef(null);
-  const API_URL = process.env.API_URL;
+  const API_URL = import.meta.env.VITE_API_URL;
   console.log("API_URL:", API_URL);
   const [message, setMessage] = useState("");
 
