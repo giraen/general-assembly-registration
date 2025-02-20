@@ -10,7 +10,7 @@ app.use(express.json());
 console.log("🚀 DATABASE_URL:", process.env.DATABASE_URL || "Not Set!");
 
 const db = mysql.createPool({
-    uri: process.env.DATABASE_URL,
+    uri: process.env.MYSQL_URL,
     connectionLimit: 10,
 });
 
