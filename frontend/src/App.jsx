@@ -7,7 +7,8 @@ const App = () => {
   const [scannedData, setScannedData] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const scannerRef = useRef(null);
-  const API_URL = import.meta.env.VITE_API_URL;
+  // const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = "https://backend-production-0e90.up.railway.app";
   console.log("API_URL:", API_URL);
   const [message, setMessage] = useState("");
 
