@@ -19,7 +19,7 @@ app.use((req, res, next) => {
 });
 
 const db = mysql.createPool({
-    uri: process.env.MYSQL_URL,
+    uri: process.env.MYSQL_PUBLIC_URL,
     connectionLimit: 5,
 });
 
