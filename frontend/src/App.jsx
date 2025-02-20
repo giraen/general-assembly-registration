@@ -1,5 +1,6 @@
 import './App.css';
 import QrScanner from 'qr-scanner';
+import 'dotenv/config';
 import { useEffect, useRef, useState } from 'react';
 
 const App = () => {
