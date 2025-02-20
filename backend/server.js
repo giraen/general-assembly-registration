@@ -38,7 +38,10 @@ app.post("/check-registration", async (req, res) => {
         const { student_id } = req.body;
         const result = await db.query("SELECT * FROM registrations WHERE student_id = ?", [student_id]);
 
-        res.json({ exists: result.length > 0 });
+        const response = { exists: result.length > 0 };
+        console.log("Response JSON:", response); // ✅ Log the response
+
+        res.json(response);
     } catch (error) {
         console.error("Database error:", error);
         res.status(500).json({ error: "Internal Server Error" });
