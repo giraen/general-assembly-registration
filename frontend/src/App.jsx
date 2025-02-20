@@ -9,6 +9,7 @@ const App = () => {
   const [showPopup, setShowPopup] = useState(false);
   const scannerRef = useRef(null);
   const API_URL = process.env.API_URL;
+  const [message, setMessage] = useState("");
 
   const initializeScanner = () => {
     if (scannerRef.current) {
