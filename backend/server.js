@@ -51,7 +51,7 @@ app.post("/register", (req, res) => {
     console.log("Received /register request:", req.body);
     
     const { tup_id } = req.body;
-    const timestamp = new Date().toISOString().slice(0, 19).replace("T", " ");
+    const timestamp = new Date().toLocaleString("en-US", { timeZone: "Asia/Manila" });
 
     const insertQuery = "INSERT INTO student_registrations (tup_id, time) VALUES (?, ?)";
 
