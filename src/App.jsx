@@ -10,45 +10,37 @@ const App = () => {
 
   const initializeScanner = () => {
     if (scannerRef.current) {
-      scanner();
+      scannerRef.current.stop();
     }
-  }
 
-  const scanner = new QrScanner(videoRef.current, (result) => {
-    console.log("Scanned Data: ", result.data);
-
-    setScannedData(result.data);
-    setShowPopup(true);
-    scanner.stop();
-  }, {
-    highlightScanRegion: true,
-    highlightCodeOutline: true,
-  })
-
-  useEffect(() => {
-    // Initialize QR scanner
     const scanner = new QrScanner(videoRef.current, (result) => {
-        console.log("Scanned Data: ", result.data);
-
-        setScannedData(result.data);
-        setShowPopup(true);
-        scanner.stop();
+      console.log("Scanned Data: ", result.data);
+  
+      setScannedData(result.data);
+      setShowPopup(true);
+      scanner.stop();
     }, {
-        highlightScanRegion: true,
-        highlightCodeOutline: true,
+      highlightScanRegion: true,
+      highlightCodeOutline: true,
     });
 
     scanner.start();
     scannerRef.current = scanner;
+  };
+
+  useEffect(() => {
+    initializeScanner();
 
     return () => {
         // Cleanup on component unmount
-        scanner.stop();
+        scannerRef.current.stop();
+        scannerRef.current = null;
     };
   }, []);
 
   const handleClosePopup = () => {
     setShowPopup(false);
+    scannerRef.current.start();
   };
 
   return(
