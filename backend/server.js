@@ -27,9 +27,9 @@ app.post("/check-registration", async (req, res) => {
         const result = await db.query("SELECT * FROM registrations WHERE student_id = ?", [student_id]);
 
         if (result.length > 0) {
-            res.json({ exists: true });  // ✅ Always return JSON
+            res.json({ exists: true });
         } else {
-            res.json({ exists: false }); // ✅ Always return JSON
+            res.json({ exists: false });
         }
     } catch (error) {
         console.error("Database error:", error);
