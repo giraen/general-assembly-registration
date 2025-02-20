@@ -35,7 +35,7 @@ db.getConnection((err, connection) => {
 app.post("/check-registration", async (req, res) => {
     try {
         const { tup_id } = req.body;
-        const result = await db.query("SELECT * FROM student_student_registrations WHERE tup_id = ?", [tup_id]).query();
+        const result = await db.promise().query("SELECT * FROM student_student_registrations WHERE tup_id = ?", [tup_id]);
 
         const response = { exists: result.length > 0 };
         console.log("Response JSON:", response); // ✅ Log the response
