@@ -7,7 +7,24 @@ const App = () => {
   const [scannedData, setScannedData] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const scannerRef = useRef(null);
-  
+
+  const initializeScanner = () => {
+    if (scannerRef.current) {
+      scanner();
+    }
+  }
+
+  const scanner = new QrScanner(videoRef.current, (result) => {
+    console.log("Scanned Data: ", result.data);
+
+    setScannedData(result.data);
+    setShowPopup(true);
+    scanner.stop();
+  }, {
+    highlightScanRegion: true,
+    highlightCodeOutline: true,
+  })
+
   useEffect(() => {
     // Initialize QR scanner
     const scanner = new QrScanner(videoRef.current, (result) => {
