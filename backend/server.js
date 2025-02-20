@@ -51,7 +51,7 @@ app.post("/register", (req, res) => {
     console.log("Received /register request:", req.body);
     
     const { tup_id } = req.body;
-    const timestamp = new Date();
+    const timestamp = new Date().toISOString().slice(0, 19).replace("T", " ");
 
     const insertQuery = "INSERT INTO registrations (tup_id, time) VALUES (?, ?)";
 
