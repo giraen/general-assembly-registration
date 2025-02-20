@@ -53,7 +53,7 @@ app.post("/register", (req, res) => {
     const { tup_id } = req.body;
     const timestamp = new Date();
 
-    const insertQuery = "INSERT INTO registrations (tup_id, registered_at) VALUES (?, ?)";
+    const insertQuery = "INSERT INTO registrations (tup_id, time) VALUES (?, ?)";
 
     db.query(insertQuery, [tup_id, timestamp], (err, results) => {
         if (err) {
