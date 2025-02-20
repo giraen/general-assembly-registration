@@ -49,6 +49,8 @@ app.post("/check-registration", async (req, res) => {
 });
 
 app.post("/register", (req, res) => {
+    console.log("Received /register request:", req.body);
+    
     const { student_id } = req.body;
     const timestamp = new Date();
 
