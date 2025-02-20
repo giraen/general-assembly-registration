@@ -53,7 +53,7 @@ const App = () => {
       fetch(`${API_URL}/check-registration`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ student_id: result.data }),
+        body: JSON.stringify({ tup_id: result.data }),
       })
       .then((response) => response.json())
       .then((data) => {
