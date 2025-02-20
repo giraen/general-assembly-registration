@@ -23,28 +23,18 @@ db.getConnection((err, connection) => {
 
 app.post("/check-registration", async (req, res) => {
     try {
-        const student_id = req.body.student_id;
-        const result = await checkDatabase(student_id);
+        const { student_id } = req.body;
+        const result = await db.query("SELECT * FROM registrations WHERE student_id = ?", [student_id]);
 
         if (result.length > 0) {
-            res.status(200).send("exists");
+            res.json({ exists: true });  // ✅ Always return JSON
         } else {
-            res.status(200).send("not_exists");
+            res.json({ exists: false }); // ✅ Always return JSON
         }
     } catch (error) {
         console.error("Database error:", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
-    
-
-    // const query = "SELECT * FROM registrations WHERE student_id = ?";
-    // db.query(query, [student_id], (err, results) => {
-    //     if (err) {
-    //         console.error("Database error:", err);
-    //         return res.status(500).json({ error: "Database error" });
-    //     }
-    //     res.json({ exists: results.length > 0 });
-    // });
 });
 
 app.post("/register", (req, res) => {
