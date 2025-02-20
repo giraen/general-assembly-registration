@@ -64,28 +64,17 @@ const App = () => {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ student_id: result.data }),
-          })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.success) {
-              setMessage("✅ Registration Successful!");
-            } else {
-              setMessage("❌ Registration Failed!");
-            }
-          })
-          .catch((error) => {
-            setMessage("❌ Error registering student.");
-            console.error("Register Error:", error);
           });
+          setMessage("✅ Registration Successful!");
         }
         setShowPopup(true);
-        scanner.stop();
       })
       .catch((error) => {
         setMessage("❌ Error connecting to server.");
         console.error("Server Error:", error);
         setShowPopup(true);
       });
+      scanner.stop();
     }, {
       highlightScanRegion: true,
       highlightCodeOutline: true,
