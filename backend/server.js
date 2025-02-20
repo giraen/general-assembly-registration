@@ -34,8 +34,8 @@ db.getConnection((err, connection) => {
 
 app.post("/check-registration", async (req, res) => {
     try {
-        const { student_id } = req.body;
-        const result = await db.query("SELECT * FROM registrations WHERE student_id = ?", [student_id]);
+        const { tup_id } = req.body;
+        const result = await db.query("SELECT * FROM registrations WHERE tup_id = ?", [tup_id]);
 
         const response = { exists: result.length > 0 };
         console.log("Response JSON:", response); // ✅ Log the response
@@ -50,12 +50,12 @@ app.post("/check-registration", async (req, res) => {
 app.post("/register", (req, res) => {
     console.log("Received /register request:", req.body);
     
-    const { student_id } = req.body;
+    const { tup_id } = req.body;
     const timestamp = new Date();
 
-    const insertQuery = "INSERT INTO registrations (student_id, registered_at) VALUES (?, ?)";
+    const insertQuery = "INSERT INTO registrations (tup_id, registered_at) VALUES (?, ?)";
 
-    db.query(insertQuery, [student_id, timestamp], (err, results) => {
+    db.query(insertQuery, [tup_id, timestamp], (err, results) => {
         if (err) {
             console.error("Database error:", err);
             return res.status(500).json({ error: "Failed to register" });
