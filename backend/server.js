@@ -22,7 +22,13 @@ db.getConnection((err, connection) => {
 });
 
 app.post("/check-registration", (req, res) => {
-    const { student_id } = req.body;
+    try {
+        const { student_id } = req.body;
+        const result = await db.query("SELECT * FROM registrations WHERE student_id = ?", [student_id]);
+    } catch (error) {
+        
+    }
+    
 
     const query = "SELECT * FROM registrations WHERE student_id = ?";
     db.query(query, [student_id], (err, results) => {
