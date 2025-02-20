@@ -5,13 +5,12 @@ import cors from 'cors';
 
 const app = express();
 
-const corsOptions = {
-    origin: 'https://oeces-general-assembly.netlify.app/', // Change this to your frontend URL if needed
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type']
-};
-
-app.use(cors(corsOptions));
+app.use(cors({
+    origin: "https://oeces-general-assembly.netlify.app", // Allow only your frontend
+    methods: "GET,POST", // Allowed methods
+    allowedHeaders: "Content-Type,Authorization", // Allowed headers
+    credentials: true, // Allow cookies (if needed)
+}));
 app.use(express.json());
 
 app.use((req, res, next) => {
