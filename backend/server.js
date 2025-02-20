@@ -7,11 +7,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-console.log("🚀 DATABASE_URL:", process.env.DATABASE_URL || "Not Set!");
-
 const db = mysql.createPool({
     uri: process.env.MYSQL_URL,
-    connectionLimit: 10,
+    connectionLimit: 5,
 });
 
 db.getConnection((err, connection) => {
@@ -23,8 +21,32 @@ db.getConnection((err, connection) => {
     }
 });
 
-app.get("/", (req, res) => {
-    res.send("API is running...");
+app.post("/check-registration", (req, res) => {
+    const { student_id } = req.body;
+
+    const query = "SELECT * FROM registrations WHERE student_id = ?";
+    db.query(query, [student_id], (err, results) => {
+        if (err) {
+            console.error("Database error:", err);
+            return res.status(500).json({ error: "Database error" });
+        }
+        res.json({ exists: results.length > 0 });
+    });
+});
+
+app.post("/register", (req, res) => {
+    const { student_id } = req.body;
+    const timestamp = new Date();
+
+    const insertQuery = "INSERT INTO registrations (student_id, registered_at) VALUES (?, ?)";
+
+    db.query(insertQuery, [student_id, timestamp], (err, results) => {
+        if (err) {
+            console.error("Database error:", err);
+            return res.status(500).json({ error: "Failed to register" });
+        }
+        res.json({ success: true, message: "Student registered successfully" });
+    });
 });
 
 const PORT = process.env.PORT || 5000;

@@ -7,16 +7,46 @@ const App = () => {
   const [scannedData, setScannedData] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const scannerRef = useRef(null);
+  const API_URL = "https://your-backend-url.com";
 
   const initializeScanner = () => {
     if (scannerRef.current) {
       scannerRef.current.stop();
     }
 
-    const scanner = new QrScanner(videoRef.current, (result) => {
+    const scanner = new QrScanner(videoRef.current, async (result) => {
       console.log("Scanned Data: ", result.data);
+
+      if (!/^TUPM-\d{2}-\d{4}$/.test(result.data)) {
+        setMessage("Invalid QR Code format.");
+        setShowPopup(true);
+        return;
+      }
   
       setScannedData(result.data);
+      
+      try {
+        const response = await fetch(`${API_URL}/check-registration`, {
+          method: POST,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ student_id: result.data }),
+        });
+
+        const data = await response.json();
+
+        if (data.exists) {
+          setMessage("⚠️ Already Registered!");
+        } else {
+          await fetch(`${API_URL}/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ student_id: result.data }),
+          })
+        }
+      } catch (error) {
+        setMessage("❌ Error connecting to server.");
+        console.error("Server Error:", error);
+      }
       setShowPopup(true);
       scanner.stop();
     }, {
@@ -56,7 +86,7 @@ const App = () => {
       {showPopup && (
         <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex justify-center items-center z-50">
           <div className="bg-[#333] m-8 rounded-md shadow-md text-center w-104 h-48 flex flex-col items-center justify-center">
-            <p className='text-3xl font-medium'>Registration Successful!</p>
+            <p className='text-3xl font-medium'>{message}</p>
             <button onClick={handleClosePopup} className="mt-4 px-6 py-2 text-white rounded-md">Close</button>
           </div>
         </div>
