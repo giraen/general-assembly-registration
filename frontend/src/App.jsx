@@ -29,7 +29,7 @@ const App = () => {
       
       try {
         const response = await fetch(`${API_URL}/check-registration`, {
-          method: POST,
+          method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ student_id: result.data }),
         });
