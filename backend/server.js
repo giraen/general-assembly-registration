@@ -35,7 +35,7 @@ db.getConnection((err, connection) => {
 app.post("/check-registration", async (req, res) => {
     try {
         const { tup_id } = req.body;
-        const [result] = await db.promise().query("SELECT * FROM student_registrations WHERE tup_id = ?", [tup_id]);
+        const [result] = await db.promise().query("SELECT * FROM student_registrations_pm WHERE tup_id = ?", [tup_id]);
 
         console.log("Database query result:", result);
         const response = { exists: result.length > 0 };
@@ -54,7 +54,7 @@ app.post("/register", (req, res) => {
     const { tup_id } = req.body;
     const timestamp = new Date().toLocaleString("en-US", { timeZone: "Asia/Manila" });
 
-    const insertQuery = "INSERT INTO student_registrations (tup_id, time) VALUES (?, ?)";
+    const insertQuery = "INSERT INTO student_registrations_pm (tup_id, time) VALUES (?, ?)";
 
     db.query(insertQuery, [tup_id, timestamp], (err, results) => {
         if (err) {
