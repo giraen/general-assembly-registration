@@ -30,28 +30,6 @@ const App = () => {
   
       setScannedData(result.data);
       
-      // try {
-      //   const response = await fetch(`${API_URL}/check-registration`, {
-      //     method: "POST",
-      //     headers: { "Content-Type": "application/json" },
-      //     body: JSON.stringify({ student_id: result.data }),
-      //   });
-
-      //   const data = await response.json();
-
-      //   if (data.exists) {
-      //     setMessage("⚠️ Already Registered!");
-      //   } else {
-      //     await fetch(`${API_URL}/register`, {
-      //       method: "POST",
-      //       headers: { "Content-Type": "application/json" },
-      //       body: JSON.stringify({ student_id: result.data }),
-      //     })
-      //   }
-      // } catch (error) {
-      //   setMessage("❌ Error connecting to server.");
-      //   console.error("Server Error:", error);
-      // }
       fetch(`${API_URL}/check-registration`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
