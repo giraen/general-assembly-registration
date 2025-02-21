@@ -20,10 +20,12 @@ const App = () => {
     const scanner = new QrScanner(videoRef.current, (result) => {
       console.log("Scanned Data: ", result.data);
 
-      if (!/^TUPM-\d{2}-\d{4, 5}$/.test(result.data)) {
-        setMessage("Invalid QR Code format.");
-        setShowPopup(true);
-        return;
+      if (!/^TUPM-\d{2}-\d{4}$/.test(result.data)) {
+        if (!/^TUPM-\d{2}-\d{5}$/.test(result.data)) {
+          setMessage("Invalid QR Code format.");
+          setShowPopup(true);
+          return;
+        } 
       }
   
       setScannedData(result.data);
